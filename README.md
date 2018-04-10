@@ -4,8 +4,7 @@ This is a personal project.
 
 Using neural networks to determine if an item is worth purchasing. 
 
-TODO:
-
+TODO:  
 •Create a script that scrapes data off of the site. Starting with the base details (designer, category, price, size, number of likes, number of comments). One thing to keep in mind is that the scraping will be a lot faster if I limit myself to data that can be seen on the home page.
 
 --  Eventually it might be interesting to attempt to glean potential input data from the item descriptions. The obvious way to do that would be to look for a limited set of known indicators (x/10, "warning!", etc). But if I ever want to get some practice with NLP, this would be a good place to start. 
