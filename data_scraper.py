@@ -2,8 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import grailed_objects
 import time
-import pickle
 import sys
+import sqlite3
 
 #Unwind an infinitely scrolling page
 def infinite_scroll(driver, limit):
@@ -29,8 +29,11 @@ if __name__=="__main__":
         items = driver.find_elements_by_class_name("feed-item")
         print(len(items),'listings')
 
-        listings = []
-
+        #OpenDB
+        conn = sqlite3.connect('listings.db')
+        curs = conn.cursor()
+        curs.execute('CREATE TABLE IF NOT EXISTS soldItems (time text, designer text, size text, title text, price integer)')
+            
         #Create listing objects from each item
         for item in items:
             info = item.text.split("\n")
@@ -40,17 +43,19 @@ if __name__=="__main__":
                 size = info[2]
                 title = info[3]
                 price = info[4][1:]
+                print(price)
 
-            date = item.find_element_by_class_name("listing-age").text
+            #Add row to database
+            row = (time,designer,size,title,int(price.replace(',','')))
+            curs.execute('INSERT INTO soldItems VALUES (?,?,?,?,?)',row)
 
-            listings.append(grailed_objects.Listing(time,designer,size,title,price,date))
+        #Commit and close DB
+        conn.commit()
+        conn.close()
 
-        #Save scraped data
-        f = open("listings.pkl", "wb")
-        pickle.dump(listings,f)
-        f.close()
     except:
         print("Unexpected error:", sys.exc_info()[0])
+        driver.quit()
     else:
         driver.quit()
 
