@@ -19,7 +19,7 @@ def infinite_scroll(driver, limit):
 if __name__=="__main__":
     driver = webdriver.Firefox()
 
-    try:
+    try:#lazy try so that the driver gets closed no matter what
         driver.get("https://www.grailed.com/sold")
 
         #Load 6 pages
@@ -34,7 +34,7 @@ if __name__=="__main__":
         curs = conn.cursor()
         curs.execute('CREATE TABLE IF NOT EXISTS soldItems (time text, designer text, size text, title text, price integer)')
             
-        #Create listing objects from each item
+        #Create db row from each item
         for item in items:
             info = item.text.split("\n")
             if 5==len(info):
